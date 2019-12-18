@@ -10,10 +10,6 @@ class MyApp extends App {
     let pageProps = {};
     if (Component.getInitialProps) {
       pageProps = await Component.getInitialProps(ctx);
-      console.log(pageProps);
-      console.log(pageProps);
-      console.log(pageProps);
-      console.log(pageProps);
     }
     // This exposes the query to the user
     pageProps.query = ctx.query;
