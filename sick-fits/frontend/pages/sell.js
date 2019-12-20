@@ -1,10 +1,11 @@
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/react-in-jsx-scope */
+import CreateItem from '../components/CreateItem';
 
 const Sell = props => (
-  <div>
-    <p>Selling it!</p>
-  </div>
+  <CreateItem>
+
+  </CreateItem>
 )
 
 export default Sell;

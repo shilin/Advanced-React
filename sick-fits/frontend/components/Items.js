@@ -34,6 +34,7 @@ class Items extends Component {
       <Center>
         <Query query={ALL_ITEMS_QUERY}>
           {({ data: { items }, error, loading }) => {
+            console.log(items);
           return (
             <ItemsList>
               {items.map( (item) => <Item key={item.id} item={item}/>)}
