@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
-import styled from 'styled-components';
-import Item from './Item'
+import React, { Component } from "react";
+import { Query } from "react-apollo";
+import gql from "graphql-tag";
+import styled from "styled-components";
+import Item from "./Item";
 
 const ALL_ITEMS_QUERY = gql`
   query ALL_ITEMS_QUERY {
@@ -30,21 +30,24 @@ const ItemsList = styled.div`
 
 class Items extends Component {
   render() {
-  return (
+    return (
       <Center>
         <Query query={ALL_ITEMS_QUERY}>
           {({ data: { items }, error, loading }) => {
             console.log(items);
-          return (
-            <ItemsList>
-              {items.map( (item) => <Item key={item.id} item={item}/>)}
-            </ItemsList>
-          );
+            return (
+              <ItemsList>
+                {items.map(item => (
+                  <Item key={item.id} item={item} />
+                ))}
+              </ItemsList>
+            );
           }}
         </Query>
       </Center>
-    )
+    );
   }
 }
 
 export default Items;
+export { ALL_ITEMS_QUERY };
