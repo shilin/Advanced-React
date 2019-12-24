@@ -1,14 +1,31 @@
-import React, { Component } from 'react';
-import { Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
-import PropTypes from 'prop-types';
-import Form from './styles/Form';
-import formatMoney from '../lib/formatMoney';
-import { parseTypeReference } from 'graphql/language/parser';
+import React, { Component } from "react";
+import { Mutation } from "react-apollo";
+import gql from "graphql-tag";
+import PropTypes from "prop-types";
+import Form from "./styles/Form";
+import formatMoney from "../lib/formatMoney";
+import { parseTypeReference } from "graphql/language/parser";
 
 const CREATE_ITEM_MUTATION = gql`
+  mutation CREATE_ITEM_MUTATION(
+    $title: String!
+    $description: String!
+    $price: Int!
+    $image: String
+    $largeImage: String
+  ) {
+    createItem(
+      title: $title
+      description: $description
+      price: $price
+      image: $image
+      largeImage: $largeImage
+    ) {
+      id
+    }
+  }
 
-`
+`;
 
 class CreateItem extends Component {
   state = {
@@ -74,9 +91,7 @@ class CreateItem extends Component {
   }
 }
 
-CreateItem.propTypes = {
-
-};
+CreateItem.propTypes = {};
 
 export default CreateItem;
-export { CREATE_ITEM_MUTATION } ;
+export { CREATE_ITEM_MUTATION };
