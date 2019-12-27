@@ -2,9 +2,11 @@ import React, { Component } from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import PropTypes from "prop-types";
+import Router from 'next/router';
 import Form from "./styles/Form";
 import formatMoney from "../lib/formatMoney";
-import { parseTypeReference } from "graphql/language/parser";
+// import { parseTypeReference } from "graphql/language/parser";
+import Error from './ErrorMessage';
 
 const CREATE_ITEM_MUTATION = gql`
   mutation CREATE_ITEM_MUTATION(
@@ -41,17 +43,59 @@ class CreateItem extends Component {
     console.log({ name, type, value });
     this.setState({ [name]: val });
   };
+
+  uploadFile = async e => {
+    console.log('Uploading file...');
+    const files = e.target.files;
+    const data = new FormData();
+    data.append('file', files[0]);
+    data.append('upload_preset', 'sickfits');
+    const res = await fetch('https://api.cloudinary.com/v1_1/dxcycfnvo/image/upload', {
+      method: 'POST',
+      body: data
+    });
+    const file = await res.json();
+    console.log(file);
+    this.setState({
+      image: file.secure_url,
+      largeImage: file.eager[0].secure_url
+    })
+  }
   render() {
     return (
       <Mutation mutation={CREATE_ITEM_MUTATION} variables={this.state}>
         {(createItem, { loading, error }) => (
           <Form
-            onSubmit={e => {
+            onSubmit={async e => {
+              // stop the form from submitting
               e.preventDefault();
-              console.log(this.state);
+              // call the mutation
+              const res = await createItem();
+              // change them to the single item page
+              console.log(res);
+              Router.push({
+                pathname: '/item',
+                query: { id: res.data.createItem.id },
+              });
+
             }}
           >
-            <fieldset>
+            <Error error={error} />
+            <fieldset disabled={loading} aria-busy={loading}>
+
+              <label htmlFor="file">
+                Image
+                <input
+                  type="file"
+                  id="file"
+                  name="file"
+                  placeholder="Upload an image"
+                  required
+                  onChange={this.uploadFile}
+                />
+                {this.state.image && <img src={this.state.image} alt="Upload preview"/>}
+              </label>
+
               <label htmlFor="title">
                 Title
                 <input
