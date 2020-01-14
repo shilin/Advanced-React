@@ -33,7 +33,8 @@ class DeleteItem extends Component {
         return (
           <div>
             <button
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 if (confirm("Are you sure you want to delete this item?")) {
                   deleteItem();
                 }
