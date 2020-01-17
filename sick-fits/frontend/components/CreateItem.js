@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 import Router from 'next/router';
 import Form from "./styles/Form";
 import formatMoney from "../lib/formatMoney";
-// import { parseTypeReference } from "graphql/language/parser";
 import Error from './ErrorMessage';
 
 const CREATE_ITEM_MUTATION = gql`
