@@ -4,12 +4,15 @@ import User from "../components/User";
 
 const Nav = () => (
   <User>
-    {({ data: { me } }) => (
+    {({ data }) => (
       <NavStyles>
+        <>
         <Link href="/items">
           <a>Shop</a>
         </Link>
-        {me && (
+        {console.log(1, data, 2)}
+        </>
+        {data.me && (
           <>
             <Link href="/me">
               <a>Account</a>
@@ -22,7 +25,7 @@ const Nav = () => (
             </Link>
           </>
         )}
-        {!me && (
+        {!data.me && (
           <Link href="/signup">
             <a>Signup</a>
           </Link>
