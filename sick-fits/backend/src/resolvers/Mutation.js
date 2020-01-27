@@ -19,7 +19,7 @@ const Mutation = {
 
   async updateItem(parent, args, ctx, info) {
     // first, take a copy of the updates
-    const updates = {...args};
+    const updates = { ...args };
     // remove the id from updates
     delete updates.id;
     // run the update method
@@ -57,18 +57,42 @@ const Mutation = {
         data: {
           ...args,
           password,
-          permissions: { set: ['USER']}
+          permissions: { set: ["USER"] }
         }
       },
       info
     );
 
     // Create the JWT token for them
-    const token = jwt.sign({userId: user.id}, process.env.APP_SECRET);
+    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
     // We set the JWT as a cookie on the response
-    ctx.response.cookie('token', token, {
+    ctx.response.cookie("token", token, {
       httpOnly: true,
-      maxAge: 1000*60*60*24*365, // one year cookie
+      maxAge: 1000 * 60 * 60 * 24 * 365 // one year cookie
+    });
+    return user;
+  },
+  async signin(parent, { email, password }, ctx, info) {
+    const user = await ctx.db.query.user({
+      where: { email }
+    }, info);
+
+    console.log(user);
+    console.log(info);
+
+    if (!user) {
+      throw new Error(`No user with email ${email}`)
+    }
+
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) {
+      throw new Error('Not valid password')
+    }
+
+    const token = jwt.sign({userId: user.id}, process.env.APP_SECRET);
+    ctx.response.cookie("token", token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 365 // one year cookie
     });
     return user;
   }
