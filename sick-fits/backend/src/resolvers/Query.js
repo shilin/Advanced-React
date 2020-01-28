@@ -6,13 +6,14 @@ const Query = {
   item: forwardTo('db'),
 
   async me(parent, args, ctx, info) {
-    console.log('ctx.request.userId');
-    console.log(ctx.request.userId);
     const userId = ctx.request.userId;
+    if (userId) {
     const user = await ctx.db.query.user({ where: { id: userId } }, info);
-    console.log(user);
     return user;
+    }
+    return null;
   }
+
 };
 
 module.exports = Query;

@@ -77,9 +77,6 @@ const Mutation = {
       where: { email }
     }, info);
 
-    console.log(user);
-    console.log(info);
-
     if (!user) {
       throw new Error(`No user with email ${email}`)
     }
@@ -95,7 +92,13 @@ const Mutation = {
       maxAge: 1000 * 60 * 60 * 24 * 365 // one year cookie
     });
     return user;
+  },
+
+  signout(parent, args, ctx, info) {
+    ctx.response.clearCookie('token');
+    return {message: 'Goodbye!'};
   }
+
 };
 
 module.exports = Mutation;
